@@ -3,11 +3,20 @@ import logo from './logo.svg';
 import './App.css';
 import { AreaChart, XAxis, YAxis, CartesianGrid, Tooltip, Area, Legend, BarChart, Bar} from 'recharts';
 import * as Chartjs from 'react-chartjs-2';
+import PrintProvider, { Print, NoPrint } from 'react-easy-print';
 
 const Line = Chartjs.Line;
 const BarChartsjs = Chartjs.Bar;
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  handlePrint() {
+    window.print();
+  }
+
   render() {
     const data = [
       {name: 'Event 1', 'Last Year': 4000, 'Current Year': 2400},
@@ -69,65 +78,78 @@ class App extends Component {
 
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        
-        <h1>reCharts</h1>
-        <AreaChart width={1520} height={250} data={data}
-          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-          <defs>
-            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-              <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
-            </linearGradient>
-            <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
-              <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
-            </linearGradient>
-          </defs>
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Legend />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
-          <Area type="monotone" dataKey="Last Year" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
-          <Area type="monotone" dataKey="Current Year" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
-        </AreaChart>
-        <Line
-          data={chartData}
-          height={55}
-          options={{
-            title: {
-              display: true,
-              text: 'React-Chartjs',
-              fontSize: 25
-            }
-          }}
-        />
-        <h1>ReCharts Bar</h1>
-        <BarChart width={1520} height={300} data={data} margin={{top: 5, right: 30, left: 5, bottom: 5}}>
-         <CartesianGrid strokeDasharray="3 3"/>
-         <XAxis dataKey="name"/>
-         <YAxis/>
-         <Tooltip/>
-         <Legend />
-         <Bar dataKey="Last Year" fill="#8884d8" />
-         <Bar dataKey="Current Year" fill="#82ca9d" />
-        </BarChart>
-
-        <BarChartsjs
-          data={chartData}
-          height={55}
-          options={{
-            title: {
-              display: true,
-              text: 'React-Chartjs Bar',
-              fontSize: 25
-            }
-          }}
-        />
+        <PrintProvider>
+          <NoPrint>
+            <header className="App-header">
+              <img src={logo} className="App-logo" alt="logo" />
+              <h1 className="App-title">Welcome to React</h1>
+            </header>
+            <button className='btn btn-primary' id='print' type='button' onClick={this.handlePrint}>Print</button>            
+          </NoPrint>
+          <Print>
+            <h1>reCharts</h1>
+            <div>
+              <AreaChart width={1520} height={250} data={data}
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                  </linearGradient>
+                  <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Legend />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <Area type="monotone" dataKey="Last Year" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
+                <Area type="monotone" dataKey="Current Year" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
+              </AreaChart>
+            </div>
+            <div>
+              <Line
+                data={chartData}
+                height={55}
+                options={{
+                  title: {
+                    display: true,
+                    text: 'React-Chartjs',
+                    fontSize: 25
+                  }
+                }}
+              />
+            </div>
+            <h1>ReCharts Bar</h1>
+            <div>
+              <BarChart width={1520} height={300} data={data} margin={{top: 5, right: 30, left: 5, bottom: 5}}>
+               <CartesianGrid strokeDasharray="3 3"/>
+               <XAxis dataKey="name"/>
+               <YAxis/>
+               <Tooltip/>
+               <Legend />
+               <Bar dataKey="Last Year" fill="#8884d8" />
+               <Bar dataKey="Current Year" fill="#82ca9d" />
+              </BarChart>
+            </div>
+            <div>
+              <BarChartsjs
+                data={chartData}
+                height={55}
+                options={{
+                  title: {
+                    display: true,
+                    text: 'React-Chartjs Bar',
+                    fontSize: 25
+                  }
+                }}
+              />
+            </div>
+          </Print>
+        </PrintProvider>
       </div>
     );
   }
